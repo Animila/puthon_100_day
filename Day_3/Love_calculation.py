@@ -16,12 +16,14 @@ count_1 += names.count("e")
 
 count = int(str(count_1)+str(count_2))
 
-if count < 10 or count > 90:
-    print(f"Ваш результат {count}, попробуй найти другую половинку")
+if count < 10:
+    print(f"Ваш результат {count}%, попробуй найти другую половинку")
 elif 40 <= count <= 50:
-    print(f'Ваш результат {count}, вам хорошо вместе')
+    print(f'Ваш результат {count}%, вам хорошо вместе')
+elif count >= 90:
+    print(f'Ваш результат {count}%. Вы убиваете вместе')
 else:
-    print(f'Ваш результат {count}')
+    print(f'Ваш результат {count}%')
 
 
 print(count)
