@@ -1,34 +1,51 @@
 import random
 
-NUMBER = random.randint(0, 100)
-count = 0
-exit = False
+EASY_LEVEL = 10
+HARD_LEVEL = 5
 
-print('Добро пожаловать в игру "угадай число"')
-print("Я загадал число от 1 до 100")
 
-level = input("Выбери сложность. Напиши (easy) или (hard): ")
-if level == 'hard':
-    count = 5
-elif level == 'easy':
-    count = 10
+def set_diffucult():
+    level = input("Выбери сложность. Напиши (easy) или (hard): ")
+    if level == 'hard':
+        return HARD_LEVEL
+    elif level == 'easy':
+        return EASY_LEVEL
 
-while not exit:
-    if count == 0:
-        print(f'Вы проиграли. Загаданное число {NUMBER}')
-        exit = True
+
+def check_answer(user, answer, count):
+    '''проверка ответа на совпадение. возврат оставшихся шагов'''
+    if user > answer:
+        print('Слишком высоко')
+        return count - 1
+    elif user < answer:
+        print('Слишком низко')
+        return count - 1
     else:
-        print(f'У вас есть {count} попыток')
+        print('Вы выйграли')
 
+
+def game():
+    print('Добро пожаловать в игру "угадай число"')
+    print("Я загадал число от 1 до 100")
+
+    NUMBER = random.randint(0, 100)
+    print(f'для разработки: {NUMBER}')
+
+    count = set_diffucult()
+
+
+    user = 0
+    while user != NUMBER:
+        print(f'У вас осталось {count} попыток')
         user = int(input('Ваше число: '))
-        if user > NUMBER:
-            print('Слишком высоко')
-            print('Повтори попытку')
-            count -= 1
-        elif user < NUMBER:
-            print('Слишком низко')
-            print('Повтори попытку')
-            count -= 1
-        else:
-            print('Вы выйграли')
-            exit = True
+        count = check_answer(user, NUMBER, count)
+        if count == 0:
+            print(f'Вы проиграли. Правильный ответ: {NUMBER}')
+            return
+        elif user != NUMBER:
+            print('Повторите снова')
+
+
+
+
+game()
