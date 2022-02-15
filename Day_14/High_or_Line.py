@@ -1,53 +1,48 @@
 from art import logo, vs
 from game_data import data
 import random
+import os
 
+def format_data(account):
+    '''Форматрирование строки под значения от словаря'''
+    account_name = account['name']
+    account_descr = account['description']
+    account_country = account['country']
+    return f'{account_name}, {account_descr}, из {account_country}'
+
+def check_answer(yser, wording_1, wording_2):
+    '''Проверка ответа и количества подписчиков и возврат логического значения'''
+    if wording_1 > wording_2:
+        return user == 'a'
+    else:
+        return user == 'b'
+
+print(logo)
 score = 0
+exit = False
+account_b = random.choice(data)
 
-# обработка запроса - сравнивание значений у двух значений
+while not exit:
+    word_1 = account_b
+    word_2 = random.choice(data)
+    if word_1 == word_2:
+        word_2 = random.choice(data)
 
-# вывод в консоль результата
+    print(f'Вариант А: {format_data(word_1)}')
+    print(vs)
+    print(f'Вариант Б: {format_data(word_2)}')
 
-def Generated_Word():
-    count_list = len(data)
-    currect_word = random.randint(0, count_list)
-    word = data[currect_word]
-    return word
+    user = input('Выберите вариант: А или Б: ').lower()
 
-def WinPlayer(variant_1, variant_2, choose):
-    global score
-    win = ''
-    if variant_1['follower_count'] > variant_2['follower_count']:
-        win = 'a'
-    else:
-        win = 'b'
+    word_count_1 = word_1['follower_count']
+    word_count_2 = word_2['follower_count']
+    is_correct = check_answer(user, word_count_1, word_count_2)
 
-    if choose == win:
+    os.system('cls')
+
+    if is_correct:
         score += 1
-        return True
+        print(f'Вы правы. Твой счет {score}')
     else:
-        return False
-
-
-
-def Game():
-    exit = False
-    while not exit:
-        var_1 = Generated_Word()
-        var_2 = Generated_Word()
-
-        print(logo)
-        print(f'Вариант А: {var_1["name"]} является {var_1["description"]} из {var_1["country"]}')
-        print(vs)
-        print(f'Вариант А: {var_2["name"]} является {var_2["description"]} из {var_2["country"]}')
-
-        user = input('A или Б: ').lower()
-        if WinPlayer(var_1, var_2, user):
-            print(f'Вы угадали. Текущее количество очков {score}')
-        else:
-            print(f'Вы проиграли. Текущее количество очков {score}')
-            exit = True
-
-
-
-Game()
+        print(f'Увы, вы проиграли. Ваш счет {score}')
+        exit = True
