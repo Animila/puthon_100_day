@@ -26,17 +26,9 @@ class Snake:
         """Создание змеи"""
 
         # Цикл (проходится по стартовой позиции (с головы и до хвоста))
-        # Инициализация черепахи в виде квадрата
-        # Поднятие вверх ручки (чтобы не оставлять линии)
-        # Цвет квадрата
-        # Перенос квадрата на позицию
-        # Добавление в массив тела квадрат
-        for pos in START_POS:
-            snake_new = Turtle('square')
-            snake_new.penup()
-            snake_new.color('white')
-            snake_new.goto(pos)
-            self.snake_seg.append(snake_new)
+        # инициализация создания блока
+        for position in START_POS:
+            self.add_block(position)
 
     def move(self):
         """Движение змеи"""
@@ -53,6 +45,23 @@ class Snake:
             new_y = self.snake_seg[seg_num - 1].ycor()
             self.snake_seg[seg_num].goto(new_x, new_y)
         self.head.forward(MOVE_DISTANCE)
+
+    def add_block(self, pos):
+        """Добавляет новые блоки"""
+
+        # Инициализация черепахи в виде квадрата
+        # Поднятие вверх ручки (чтобы не оставлять линии)
+        # Цвет квадрата
+        # Перенос квадрата на позицию
+        # Добавление в массив тела квадрат
+        snake_new = Turtle('square')
+        snake_new.penup()
+        snake_new.color('white')
+        snake_new.goto(pos)
+        self.snake_seg.append(snake_new)
+
+    def extend(self):
+        self.add_block(self.snake_seg[-1].position())
 
     def up(self):
         if self.head.heading() != DOWN:
