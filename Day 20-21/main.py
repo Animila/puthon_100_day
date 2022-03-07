@@ -4,8 +4,6 @@ from snake import Snake
 from food import Food
 import time
 
-SCALE = 300
-
 # Инициализация окна
 # настройка размера
 # цвет фона
@@ -29,7 +27,6 @@ screen.onkey(snake.down, 'Down')
 screen.onkey(snake.left, 'Left')
 screen.onkey(snake.right, 'Right')
 
-
 # реализация игры
 # бесконечный цикл
 # обновление экрана
@@ -47,23 +44,17 @@ while game_is_on:
         score.increase_score()
 
     # Проверка на столкновение
-    if snake.head.xcor() > SCALE or snake.head.xcor() < -SCALE or snake.head.ycor() > SCALE or snake.head.ycor() < -SCALE:
+    if snake.head.xcor() > 390 or snake.head.xcor() < -410 or snake.head.ycor() > 300 or snake.head.ycor() < -290:
         game_is_on = False
         score.game_over()
 
     # проверка на столкновение
     # цикл по всем сегментам (кроме 1)
     # Если голова сталкивается с какой-либо части тела
-        # То срабатывает конец игры
+    # То срабатывает конец игры
     for segment in snake.snake_seg[1:]:
         if snake.head.distance(segment) < 5:
             game_is_on = False
             score.game_over()
-
-
-
-
-
-
 
 screen.exitonclick()
