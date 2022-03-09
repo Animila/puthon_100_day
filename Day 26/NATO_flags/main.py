@@ -1,7 +1,8 @@
 import pandas
 
-data = pandas.read_csv("nato_phonetic_alphabet.csv")
+data = pandas.read_csv("../../Day 29-30/lesson_5/nato_phonetic_alphabet.csv")
 alhabet = data.to_dict()
+
 nato_alhabet = {row.letter:row.code for (index, row) in data.iterrows()}
 # {new_key:new_value for (index, row) in df.iterrows()}
 print(nato_alhabet)

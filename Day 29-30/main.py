@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import random
+import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 # словарь
@@ -13,6 +14,25 @@ letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+
+def search_site():
+    site = website_input.get()
+    try:
+        with open("password.json", "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Ошибка", message="Файл не найден")
+    else:
+        try:
+            login = data[site]["login"]
+            password = data[site]["password"]
+        except KeyError as msg:
+            messagebox.showinfo(title="Ошибка", message=f"Не найден сайт {msg}")
+        else:
+            messagebox.showinfo(title=site, message=f"Ваши данные:"
+                                                           f"\n\n Логин: {login}"
+                                                           f"\n Пароль: {password}")
 
 
 def generate_password():
@@ -46,10 +66,16 @@ def save_password():
     site = website_input.get()
     password = password_input.get()
     login = login_input.get()
+    new_data = {
+        site: {
+            "login": login,
+            "password": password,
+        }
+    }
 
     # проверка на пустые строки (если пустое - выводится окно)
     # в противном случае задается вопрос о правильности введенных данных
-    if site == '' or password == '' or login == '':
+    if password == ' ' or login == ' ' or len(password) == 0 or len(login) == 0:
         messagebox.showinfo(title="ОШИБКА", message="Одна из строк пустая")
     else:
         user_var = messagebox.askyesno(title=site, message=f"Введенные ваши данные: "
@@ -57,11 +83,23 @@ def save_password():
                                                            f"\n Пароль: {password}"
                                                            f"\n\n Вы уверены, что все верно?")
 
-        # если все верно, то в файл записывается строка состоящая из переменных
-        # а также очищается все поля
+        # если все верно
+        # попытка загрузки словаря из файла
+        # если нет файла - создание файла и загрузка словаря
+        # если все получилось - обновление словаря в файле
+        # в любом случаи обнулить поля
         if user_var:
-            with open("password.txt", mode="a") as file:
-                file.write(f"{site} | {login} | {password}\n")
+            try:
+                with open("password.json", mode="r") as file:
+                    data = json.load(file)
+            except FileNotFoundError:
+                with open("password.json", mode="w") as file:
+                    json.dump(new_data, file, indent=4)
+            else:
+                data.update(new_data)
+                with open("password.json", "w") as file:
+                    json.dump(data, file, indent=4)
+            finally:
                 website_input.delete(0, END)
                 password_input.delete(0, END)
 
@@ -89,8 +127,8 @@ password_label = Label(text="Пароль:", width=20)
 password_label.grid(row=3, column=0)
 
 # ввод данных
-website_input = Entry(width=50)
-website_input.grid(row=1, column=1, columnspan=2)
+website_input = Entry(width=32)
+website_input.grid(row=1, column=1)
 website_input.focus()
 
 login_input = Entry(width=50)
@@ -101,6 +139,10 @@ password_input = Entry(width=32)
 password_input.grid(row=3, column=1)
 
 # кнопки
+
+search_btn = Button(text="Поиск", width=14, command=search_site)
+search_btn.grid(row=1, column=2)
+
 gen_pas = Button(text="Генерация пароля", width=14, command=generate_password)
 gen_pas.grid(row=3, column=2)
 
