@@ -36,4 +36,32 @@ for num in data_birthday:
                 msg=f"Subject:Happy Birthday\n\n{result_letter}")
 
 
-
+# -- Как надо было--
+# import random
+# import smtplib
+# import pandas
+# from datetime import datetime
+#
+# PLACEHOLDER = "[NAME]"
+# my_email = "19itypas70@gmail.com"
+# password = "Tomas_Kirit_Robert"
+#
+# today = datetime.now()
+# today_day = (today.month, today.day)
+#
+# data = pandas.read_csv("birthdays.csv")
+# birthday_list = {(data_row["month"], data_row["day"]): data_row for (index, data_row) in data.iterrows()}
+# if today_day in birthday_list:
+#     birthday_person = birthday_list[today_day]
+#     file_path = f"letter_templates/letter_{random.randint(1,3)}.txt"
+#     with open(file_path) as letter:
+#         content = letter.read()
+#         content = content.replace("[NAME]", birthday_person["name"])
+#
+#     with smtplib.SMTP("smtp.gmail.com") as connection:
+#         connection.starttls()
+#         connection.login(my_email, password)
+#         connection.sendmail(
+#             from_addr=my_email,
+#             to_addrs=birtsday_person["email"],
+#             msg=f"Subject:Happy Birthday\n\n{content}")
